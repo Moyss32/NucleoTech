@@ -1,14 +1,16 @@
 :root{
-  --azul:#0d1b2a;
-  --azul2:#1b263b;
+  --azul-profundo:#0A1F44;
+  --azul-vibrante:#2563EB;
   --branco:#ffffff;
   --cinza:#f5f7fa;
   --cinza2:#e9edf2;
+  --acento:#22D3EE;
+  --fundo:#1e1e1e;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,Arial,sans-serif}
 
-body{background:var(--cinza);color:#222}
+body{background:var(--fundo);color:#222}
 
 /* NAVBAR */
 
@@ -26,7 +28,7 @@ header{
 
 .logo{
   font-weight:bold;
-  color:var(--azul);
+  color:var(--azul-vibrante);
   font-size:20px;
 }
 
@@ -35,12 +37,13 @@ nav a{
   text-decoration:none;
   color:#444;
   font-size:14px;
+  font-weight: 700;
 }
 
 /* HERO */
 
 .hero{
-  background:linear-gradient(120deg,var(--azul),var(--azul2));
+  background:linear-gradient(120deg,var(--azul-profundo),var(--azul-vibrante));
   color:white;
   padding:70px 40px;
   display:flex;
@@ -65,7 +68,7 @@ nav a{
 
 .btn{
   background:white;
-  color:var(--azul);
+  color:var(--azul-profundo);
   padding:12px 22px;
   border:none;
   border-radius:6px;
@@ -83,7 +86,7 @@ nav a{
 .hero-media{
   width:420px;
   height:240px;
-  background:rgba(255,255,255,.08);
+  background:rgba(242, 242, 242, 0.08);
   border-radius:10px;
   display:flex;
   justify-content:center;
@@ -103,7 +106,7 @@ nav a{
 .section-title{
   text-align:center;
   margin-bottom:35px;
-  color:var(--azul);
+  color:var(--cinza);
 }
 
 /* CATEGORIAS */
@@ -125,7 +128,7 @@ nav a{
 
 .category:hover{
   transform:translateY(-4px);
-  box-shadow:0 6px 16px rgba(0,0,0,0.08);
+  box-shadow:0 6px 16px rgba(154, 154, 154, 0.08);
 }
 
 .icon{
@@ -176,7 +179,7 @@ nav a{
 
 .price{
   font-weight:bold;
-  color:var(--azul);
+  color:var(--azul-vibrante);
   margin-top:8px;
 }
 
@@ -202,6 +205,7 @@ nav a{
 
 .benefit{
   padding:20px;
+  color: var(--cinza);
 }
 
 /* CTA */
@@ -219,7 +223,7 @@ nav a{
   border:none;
   border-radius:6px;
   background:white;
-  color:var(--azul);
+  color:var(--azul-profundo);
   font-weight:bold;
 }
 
