@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Produto - NucleoTech</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">NucleoTech</div>
+        <nav>
+            <ul>
+                <li><a href="/">Início</a></li>
+                <li><a href="/produtos">Produtos</a></li>
+            </ul>
+        </nav>
+        <div id="auth-buttons" class="auth-buttons"></div>
+    </header>
+
+    <main>
+        <section id="product-detail-container" style="max-width: 1000px; margin: 0 auto;">
+            <!-- Dynamic content from JS -->
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 NucleoTech. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+    <script>
+        const productId = {{ product_id }};
+
+        async function loadProductDetail() {
+            try {
+                const response = await fetch(`/api/products/${productId}`);
+                if (!response.ok) {
+                    document.getElementById('product-detail-container').innerHTML = '<h2>Produto não encontrado.</h2>';
+                    return;
+                }
+                const p = await response.json();
+                
+                document.title = `${p.name} - NucleoTech`;
+                
+                document.getElementById('product-detail-container').innerHTML = `
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start;">
+                        <div style="background-color: var(--secondary-gray); height: 400px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--accent-blue); font-weight: bold;">
+                            ${p.category}
+                        </div>
+                        <div>
+                            <h1 style="color: var(--accent-blue); margin-bottom: 1rem;">${p.name}</h1>
+                            <p style="font-size: 1.2rem; color: var(--text-light); margin-bottom: 1.5rem;">${p.description}</p>
+                            <p style="font-size: 2rem; font-weight: bold; color: var(--accent-blue); margin-bottom: 2rem;">${formatCurrency(p.price)}</p>
+                            
+                            <button onclick="buyProduct(${p.id})" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.2rem;">Comprar Agora</button>
+                            
+                            <div style="margin-top: 3rem;">
+                                <h3 style="margin-bottom: 1rem; border-bottom: 2px solid var(--accent-blue); display: inline-block;">Benefícios</h3>
+                                <p>${p.benefits || 'Informação não disponível.'}</p>
+                            </div>
+                            
+                            <div style="margin-top: 2rem;">
+                                <h3 style="margin-bottom: 1rem; border-bottom: 2px solid var(--accent-blue); display: inline-block;">Especificações</h3>
+                                <p>${p.specifications || 'Informação não disponível.'}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Erro ao carregar detalhes:', error);
+            }
+        }
+
+        async function buyProduct(productId) {
+            const user = await checkAuth();
+            if (!user) {
+                window.location.href = '/login';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/orders', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ product_id: productId })
+                });
+
+                if (response.ok) {
+                    showNotification('Compra realizada com sucesso! Verifique seu perfil.');
+                } else {
+                    showNotification('Erro ao processar compra.', 'error');
+                }
+            } catch (error) {
+                console.error('Erro ao comprar:', error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadProductDetail);
+    </script>
+</body>
+</html>
