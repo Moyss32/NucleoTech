@@ -1,9 +1,9 @@
 :root {
-    --primary-white: #ffffff;
-    --secondary-gray: #f4f4f9;
-    --accent-blue: #003366;
-    --text-dark: #333333;
-    --text-light: #666666;
+    --primary-white: hsl(240, 37%, 14%);
+    --secondary-gray: #141c2a;
+    --accent-blue: #0095ff;
+    --text-dark: #fdfdfd;
+    --text-light: #ffffff;
     --border-color: #dddddd;
     --success-green: #28a745;
     --error-red: #dc3545;
@@ -79,7 +79,7 @@ nav ul li a:hover {
 }
 
 .btn-primary:hover {
-    background-color: #002244;
+    background-color: #86b9ec;
 }
 
 .btn-outline {
@@ -183,7 +183,7 @@ section {
 
 /* Footer */
 footer {
-    background-color: var(--accent-blue);
+    background-color: var(--secondary-gray);
     color: var(--primary-white);
     padding: 3rem 5%;
     text-align: center;
