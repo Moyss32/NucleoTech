@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - NucleoTech</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">NucleoTech</div>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="tools.html">Ferramentas</a>
+            <a href="history.html">Histórico</a>
+            <a href="#" id="logoutBtn">Sair</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Bem-vindo ao NucleoTech</h1>
+        <div class="card">
+            <h2>Seu Resumo</h2>
+            <p>Acesse as ferramentas digitais para processar seus arquivos de forma rápida e eficiente.</p>
+            <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                <a href="tools.html" class="btn btn-primary">Ver Ferramentas</a>
+                <a href="history.html" class="btn" style="border: 1px solid var(--border-color);">Ver Histórico</a>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+            <div class="card">
+                <h3>Imagens</h3>
+                <p>Conversão, remoção de fundo, upscale e thumbnails.</p>
+            </div>
+            <div class="card">
+                <h3>Áudio</h3>
+                <p>Conversão entre WAV e MP3 com alta qualidade.</p>
+            </div>
+            <div class="card">
+                <h3>Assinatura</h3>
+                <p>Plano Gratuito: 100 créditos restantes.</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import auth from '../js/auth.js';
+
+        if (!auth.isAuthenticated()) {
+            window.location.href = 'login.html';
+        }
+
+        document.getElementById('logoutBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            auth.logout();
+        });
+    </script>
+</body>
+</html>

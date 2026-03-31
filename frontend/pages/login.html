@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - NucleoTech</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card" style="max-width: 400px; margin: 100px auto;">
+            <h2 class="logo" style="text-align: center;">NucleoTech</h2>
+            <h3 style="text-align: center;">Acesse sua conta</h3>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Usuário</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Entrar</button>
+            </form>
+            <p style="text-align: center; margin-top: 1rem;">
+                Não tem uma conta? <a href="register.html">Cadastre-se</a>
+            </p>
+        </div>
+    </div>
+
+    <script type="module">
+        import auth from '../js/auth.js';
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const result = await auth.login(username, password);
+            if (result.success) {
+                window.location.href = 'dashboard.html';
+            } else {
+                alert(result.error);
+            }
+        });
+    </script>
+</body>
+</html>
