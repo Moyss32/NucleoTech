@@ -1,53 +1,151 @@
-# NucleoTech - Commit 2: Autenticação e API de Usuários
+# NucleoTech - Commit Final: Integração Total e Sistema Funcional
 
-Este commit implementa o sistema de autenticação JWT e a API para gerenciamento de usuários, permitindo o cadastro, login e visualização de perfil.
+Este commit representa a integração completa do backend e frontend, resultando em um sistema SaaS "NucleoTech" funcional. Inclui ajustes finais de rotas, configurações de banco de dados e um `README.md` abrangente com instruções de instalação e execução.
 
 ## Conteúdo do Commit
 
-- **Integração do Django Rest Framework (DRF)**: Configuração do DRF para construção de APIs.
-- **Autenticação JWT**: Implementação de `djangorestframework-simplejwt` para autenticação baseada em tokens.
-- **Serializadores de Usuário**: Criação de `UserSerializer` para lidar com a criação e representação de dados de usuários.
-- **Views de Autenticação**:
-    - `RegisterView`: Endpoint para criação de novas contas de usuário.
-    - `UserProfileView`: Endpoint para visualizar e atualizar o perfil do usuário autenticado.
-    - `TokenObtainPairView` e `TokenRefreshView`: Endpoints padrão do SimpleJWT para login e renovação de tokens.
-- **Roteamento de API**: Configuração das URLs para os novos endpoints de usuário em `api/users/`.
+- **Integração Frontend/Backend**: Todas as páginas do frontend (Login, Cadastro, Dashboard, Ferramentas, Histórico) estão conectadas às APIs do Django.
+- **Configuração de Rotas**: Rotas do Django ajustadas para servir os arquivos estáticos do frontend e o `index.html` como página inicial.
+- **Ajustes de Banco de Dados**: Verificação e garantia de que todas as migrações foram aplicadas e o banco de dados está configurado corretamente.
+- **README.md Completo**: Este arquivo contém todas as instruções necessárias para configurar, instalar e executar o projeto completo.
 
-## Como Testar a Autenticação (Commit 2)
+## Como Configurar e Rodar o Projeto Completo
 
 ### Pré-requisitos
 
-- Siga os passos de configuração do **Commit 1**.
-- Instale as novas dependências:
+- Python 3.11
+- MySQL Server
+- `ffmpeg` (para processamento de áudio)
+
+### Passos de Configuração
+
+1.  **Clone o repositório** (ou descompacte o arquivo `commit_final_integrado.zip`).
+
+2.  **Navegue até o diretório do projeto**:
     ```bash
-    pip install djangorestframework djangorestframework-simplejwt
+    cd nucleotech
     ```
 
-### Endpoints Disponíveis
-
-- **Cadastro**: `POST /api/users/register/`
-    - Corpo: `{"username": "seu_usuario", "password": "sua_senha", "email": "seu@email.com"}`
-- **Login (Obter Token)**: `POST /api/users/login/`
-    - Corpo: `{"username": "seu_usuario", "password": "sua_senha"}`
-    - Retorna: `access` e `refresh` tokens.
-- **Renovar Token**: `POST /api/users/token/refresh/`
-    - Corpo: `{"refresh": "seu_refresh_token"}`
-- **Perfil do Usuário**: `GET /api/users/profile/`
-    - Requer Header: `Authorization: Bearer <seu_access_token>`
-
-### Exemplo de Uso com `curl`
-
-1.  **Cadastrar**:
+3.  **Crie e ative o ambiente virtual**:
     ```bash
-    curl -X POST http://127.0.0.1:8000/api/users/register/ -H "Content-Type: application/json" -d '{"username": "testuser", "password": "testpassword123"}'
+    python3.11 -m venv venv
+    source venv/bin/activate
     ```
 
-2.  **Login**:
+4.  **Instale as dependências do Python**:
     ```bash
-    curl -X POST http://127.0.0.1:8000/api/users/login/ -H "Content-Type: application/json" -d '{"username": "testuser", "password": "testpassword123"}'
+    pip install Django mysqlclient djangorestframework djangorestframework-simplejwt Pillow rembg pydub
+    ```
+    *Se houver erros na instalação do `mysqlclient` ou `rembg`, certifique-se de que os pacotes de desenvolvimento do MySQL, Python e `build-essential` estejam instalados:*
+    ```bash
+    sudo apt-get update
+    sudo apt-get install -y libmysqlclient-dev pkg-config build-essential python3.11-dev ffmpeg
+    pip install mysqlclient rembg
     ```
 
-3.  **Acessar Perfil** (substitua `<access_token>` pelo token recebido no login):
+5.  **Configure o Banco de Dados MySQL**:
+    - Certifique-se de que o serviço MySQL esteja em execução.
+    - Conecte-se ao MySQL como `root` (ou um usuário com privilégios administrativos) e crie o banco de dados e o usuário:
     ```bash
-    curl -X GET http://127.0.0.1:8000/api/users/profile/ -H "Authorization: Bearer <access_token>"
+    sudo mysql -u root -p
+    # Digite a senha do root do MySQL quando solicitado
+    CREATE DATABASE IF NOT EXISTS nucleotech_db;
+    CREATE USER 'nucleotech_user'@'localhost' IDENTIFIED BY 'password';
+    GRANT ALL PRIVILEGES ON nucleotech_db.* TO 'nucleotech_user'@'localhost';
+    FLUSH PRIVILEGES;
+    EXIT;
     ```
+    *Nota: A senha 'password' é para fins de desenvolvimento. Em produção, use uma senha forte e segura.*
+
+6.  **Aplique as Migrações do Django**:
+    ```bash
+    python manage.py migrate
+    ```
+
+7.  **Crie um superusuário (opcional, para acessar o painel administrativo do Django)**:
+    ```bash
+    python manage.py createsuperuser
+    ```
+    *Siga as instruções para criar o superusuário.*
+
+8.  **Inicie o servidor de desenvolvimento do Django**:
+    ```bash
+    python manage.py runserver
+    ```
+
+### Acessando o Frontend
+
+Após iniciar o servidor Django, abra seu navegador e acesse `http://127.0.0.1:8000/`. Você será redirecionado para a página de login do frontend.
+
+### Testando as Funcionalidades
+
+- **Cadastro e Login**: Utilize as páginas de `register.html` e `login.html` para criar uma conta e fazer login.
+- **Processamento de Imagens e Áudio**: Na página `tools.html`, faça upload de arquivos e utilize as ferramentas de processamento. Os resultados serão exibidos e estarão disponíveis para download.
+- **Histórico**: A página `history.html` (atualmente com um placeholder) deverá ser implementada para exibir o histórico de processamento do usuário.
+
+## Estrutura de Pastas Final
+
+```
+project/
+├── backend/
+│   ├── nucleotech_project/
+│   │   ├── __init__.py
+│   │   ├── asgi.py
+│   │   ├── settings.py
+│   │   ├── urls.py
+│   │   └── wsgi.py
+│   ├── users/
+│   │   ├── migrations/
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── tests.py
+│   │   ├── urls.py
+│   │   └── views.py
+│   ├── services/
+│   │   ├── migrations/
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── models.py
+│   │   ├── tests.py
+│   │   └── views.py
+│   ├── processing/
+│   │   ├── migrations/
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── models.py
+│   │   ├── tests.py
+│   │   ├── urls.py
+│   │   └── views.py
+│   └── subscriptions/
+│       ├── migrations/
+│       ├── __init__.py
+│       ├── admin.py
+│       ├── apps.py
+│       ├── models.py
+│       ├── tests.py
+│       └── views.py
+├── frontend/
+│   ├── css/
+│   │   └── style.css
+│   ├── js/
+│   │   ├── auth.js
+│   │   └── processing.js
+│   ├── pages/
+│   │   ├── dashboard.html
+│   │   ├── history.html
+│   │   ├── login.html
+│   │   ├── register.html
+│   │   └── tools.html
+│   └── index.html
+├── tools/
+│   ├── audio_tools.py
+│   └── image_tools.py
+├── manage.py
+├── README.md
+└── venv/
+```
