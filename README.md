@@ -1,13 +1,7 @@
-# NucleoTech - Commit Final: Integração Total e Sistema Funcional
 
-Este commit representa a integração completa do backend e frontend, resultando em um sistema SaaS "NucleoTech" funcional. Inclui ajustes finais de rotas, configurações de banco de dados e um `README.md` abrangente com instruções de instalação e execução.
+##NucleoTech
 
-## Conteúdo do Commit
-
-- **Integração Frontend/Backend**: Todas as páginas do frontend (Login, Cadastro, Dashboard, Ferramentas, Histórico) estão conectadas às APIs do Django.
-- **Configuração de Rotas**: Rotas do Django ajustadas para servir os arquivos estáticos do frontend e o `index.html` como página inicial.
-- **Ajustes de Banco de Dados**: Verificação e garantia de que todas as migrações foram aplicadas e o banco de dados está configurado corretamente.
-- **README.md Completo**: Este arquivo contém todas as instruções necessárias para configurar, instalar e executar o projeto completo.
+descrção
 
 ## Como Configurar e Rodar o Projeto Completo
 
@@ -19,7 +13,7 @@ Este commit representa a integração completa do backend e frontend, resultando
 
 ### Passos de Configuração
 
-1.  **Clone o repositório** (ou descompacte o arquivo `commit_final_integrado.zip`).
+1.  **Clone o repositório e descompacte o arquivo.**
 
 2.  **Navegue até o diretório do projeto**:
     ```bash
@@ -55,7 +49,7 @@ Este commit representa a integração completa do backend e frontend, resultando
     FLUSH PRIVILEGES;
     EXIT;
     ```
-    *Nota: A senha 'password' é para fins de desenvolvimento. Em produção, use uma senha forte e segura.*
+    *Nota: A senha 'password' é para fins de desenvolvimento.*
 
 6.  **Aplique as Migrações do Django**:
     ```bash
