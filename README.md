@@ -1,67 +1,53 @@
-# NucleoTech - Soluções Tecnológicas
+# NucleoTech - Commit 2: Autenticação e API de Usuários
 
-NucleoTech é uma plataforma profissional de venda de softwares, desenvolvida com um backend robusto em Python (Flask) e um frontend moderno e minimalista utilizando apenas HTML, CSS e JavaScript puros.
+Este commit implementa o sistema de autenticação JWT e a API para gerenciamento de usuários, permitindo o cadastro, login e visualização de perfil.
 
-## 🚀 Funcionalidades
+## Conteúdo do Commit
 
-- **Página Inicial**: Hero section impactante, seção sobre, destaques de produtos e depoimentos.
-- **Catálogo de Produtos**: Listagem dinâmica com filtros por categoria.
-- **Detalhes do Produto**: Informações detalhadas, benefícios e especificações.
-- **Sistema de Autenticação**: Cadastro de usuários e login seguro com hash de senha.
-- **Área do Usuário**: Perfil com histórico de pedidos.
-- **Painel Administrativo**: Gestão completa de produtos (CRUD), visualização de usuários e pedidos.
-- **API REST**: Comunicação eficiente entre frontend e backend.
-- **Design Responsivo**: Otimizado para desktop e dispositivos móveis.
+- **Integração do Django Rest Framework (DRF)**: Configuração do DRF para construção de APIs.
+- **Autenticação JWT**: Implementação de `djangorestframework-simplejwt` para autenticação baseada em tokens.
+- **Serializadores de Usuário**: Criação de `UserSerializer` para lidar com a criação e representação de dados de usuários.
+- **Views de Autenticação**:
+    - `RegisterView`: Endpoint para criação de novas contas de usuário.
+    - `UserProfileView`: Endpoint para visualizar e atualizar o perfil do usuário autenticado.
+    - `TokenObtainPairView` e `TokenRefreshView`: Endpoints padrão do SimpleJWT para login e renovação de tokens.
+- **Roteamento de API**: Configuração das URLs para os novos endpoints de usuário em `api/users/`.
 
-## 🛠️ Tecnologias Utilizadas
+## Como Testar a Autenticação (Commit 2)
 
-- **Backend**: Python 3.11, Flask, SQLAlchemy (ORM), Flask-Login, Flask-Bcrypt.
-- **Frontend**: HTML5, CSS3 (Variáveis, Flexbox, Grid), JavaScript (Fetch API).
-- **Banco de Dados**: SQLite (Fácil configuração local).
+### Pré-requisitos
 
-## 📁 Estrutura do Projeto
+- Siga os passos de configuração do **Commit 1**.
+- Instale as novas dependências:
+    ```bash
+    pip install djangorestframework djangorestframework-simplejwt
+    ```
 
-```text
-nucleotech/
-├── app/
-│   ├── models/          # Modelos do Banco de Dados (MVC)
-│   ├── routes/          # Rotas da API e Páginas (MVC)
-│   ├── static/          # Arquivos estáticos (CSS, JS, Imagens)
-│   ├── templates/       # Templates HTML
-│   └── __init__.py      # Inicialização do Flask
-├── instance/            # Banco de Dados SQLite
-├── config.py            # Configurações do sistema
-├── run.py               # Script para rodar o servidor
-├── seed.py              # Script para popular o banco de dados
-└── requirements.txt     # Dependências do projeto
-```
+### Endpoints Disponíveis
 
-## 🏃 Como Rodar o Projeto
+- **Cadastro**: `POST /api/users/register/`
+    - Corpo: `{"username": "seu_usuario", "password": "sua_senha", "email": "seu@email.com"}`
+- **Login (Obter Token)**: `POST /api/users/login/`
+    - Corpo: `{"username": "seu_usuario", "password": "sua_senha"}`
+    - Retorna: `access` e `refresh` tokens.
+- **Renovar Token**: `POST /api/users/token/refresh/`
+    - Corpo: `{"refresh": "seu_refresh_token"}`
+- **Perfil do Usuário**: `GET /api/users/profile/`
+    - Requer Header: `Authorization: Bearer <seu_access_token>`
 
-1. **Instale as dependências**:
-   ```bash
-   pip install -r requirements.txt
-   ```
+### Exemplo de Uso com `curl`
 
-2. **Prepare o Banco de Dados**:
-   Execute o script de semente para criar as tabelas e adicionar produtos iniciais:
-   ```bash
-   python seed.py
-   ```
-   *Isso também criará um usuário administrador padrão:*
-   - **Email**: `admin@nucleotech.com`
-   - **Senha**: `admin123`
+1.  **Cadastrar**:
+    ```bash
+    curl -X POST http://127.0.0.1:8000/api/users/register/ -H "Content-Type: application/json" -d '{"username": "testuser", "password": "testpassword123"}'
+    ```
 
-3. **Inicie o Servidor**:
-   ```bash
-   python run.py
-   ```
+2.  **Login**:
+    ```bash
+    curl -X POST http://127.0.0.1:8000/api/users/login/ -H "Content-Type: application/json" -d '{"username": "testuser", "password": "testpassword123"}'
+    ```
 
-4. **Acesse o Site**:
-   Abra o navegador em `http://127.0.0.1:5000`
-
-## 🔒 Segurança
-
-- Senhas são armazenadas utilizando **Bcrypt** (hashing seguro).
-- Proteção de rotas administrativas e de usuário.
-- Separação clara entre lógica de negócio (backend) e apresentação (frontend).
+3.  **Acessar Perfil** (substitua `<access_token>` pelo token recebido no login):
+    ```bash
+    curl -X GET http://127.0.0.1:8000/api/users/profile/ -H "Authorization: Bearer <access_token>"
+    ```
