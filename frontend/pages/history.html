@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico - NucleoTech</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+<body>
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <div class="logo">
+                <div style="width: 24px; height: 24px; background: var(--primary); border-radius: 4px;"></div>
+                NucleoTech
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="sidebar-link">Dashboard</a>
+                <a href="tools.html" class="sidebar-link">Ferramentas</a>
+                <a href="history.html" class="sidebar-link active">Histórico</a>
+                <a href="profile.html" class="sidebar-link">Perfil</a>
+                <a href="subscription.html" class="sidebar-link">Assinatura</a>
+            </nav>
+            <div style="margin-top: auto;">
+                <button onclick="api.logout()" class="sidebar-link" style="width: 100%; text-align: left; background: none; border: none; cursor: pointer;">🚪 Sair</button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="page-header">
+                <h1>Histórico de Tarefas</h1>
+                <p>Veja e baixe seus arquivos processados anteriormente.</p>
+            </header>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ferramenta</th>
+                            <th>Data</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-table-body">
+                        <!-- Histórico será renderizado pelo JS -->
+                        <tr>
+                            <td colspan="4" style="text-align: center; padding: 2rem;">Carregando histórico...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <div id="notification-container"></div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/history.js"></script>
+</body>
+</html>

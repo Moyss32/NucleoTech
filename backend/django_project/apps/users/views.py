@@ -11,7 +11,7 @@ class RegisterView(generics.CreateAPIView):
 
 class ProfileView(generics.RetrieveAPIView):
     serializer_class = UserSerializer
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
 
     def get_object(self):
         return self.request.user

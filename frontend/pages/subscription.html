@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assinatura - NucleoTech</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+<body>
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <div class="logo">
+                <div style="width: 24px; height: 24px; background: var(--primary); border-radius: 4px;"></div>
+                NucleoTech
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="sidebar-link">🏠 Dashboard</a>
+                <a href="tools.html" class="sidebar-link">🛠️ Ferramentas</a>
+                <a href="history.html" class="sidebar-link">📜 Histórico</a>
+                <a href="profile.html" class="sidebar-link">👤 Perfil</a>
+                <a href="subscription.html" class="sidebar-link active">💳 Assinatura</a>
+            </nav>
+            <div style="margin-top: auto;">
+                <button onclick="api.logout()" class="sidebar-link" style="width: 100%; text-align: left; background: none; border: none; cursor: pointer;">🚪 Sair</button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="page-header">
+                <h1>Assinatura e Uso</h1>
+                <p>Gerencie seu plano e acompanhe seus limites.</p>
+            </header>
+
+            <div class="grid">
+                <div class="card" id="subscription-info">
+                    <h3>Plano Atual</h3>
+                    <h2 id="current-plan-name" style="margin: 1rem 0; color: var(--primary);">Carregando...</h2>
+                    <p id="plan-limit" style="margin-bottom: 0.5rem;">0 / 0 execuções</p>
+                    <div class="progress-container" style="margin-bottom: 1.5rem;">
+                        <div id="usage-progress" class="progress-bar" style="width: 0%;"></div>
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%;">Fazer Upgrade</button>
+                </div>
+
+                <div class="card">
+                    <h3>Próximo Ciclo</h3>
+                    <p style="margin: 1rem 0;">Sua cota será renovada em:</p>
+                    <h2 style="color: var(--text);">15 de Maio, 2026</h2>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="notification-container"></div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/profile.js"></script>
+</body>
+</html>

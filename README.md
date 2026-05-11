@@ -1,145 +1,549 @@
+# NucleoTech Backend
 
-##NucleoTech
+Backend principal do projeto NucleoTech, desenvolvido com Django + Django REST Framework.
 
-descrção
+O núcleo do sistema está concentrado em:
 
-## Como Configurar e Rodar o Projeto Completo
-
-### Pré-requisitos
-
-- Python 3.11
-- MySQL Server
-- `ffmpeg` (para processamento de áudio)
-
-### Passos de Configuração
-
-1.  **Clone o repositório e descompacte o arquivo.**
-
-2.  **Navegue até o diretório do projeto**:
-    ```bash
-    cd nucleotech
-    ```
-
-3.  **Crie e ative o ambiente virtual**:
-    ```bash
-    python3.11 -m venv venv
-    source venv/bin/activate
-    ```
-
-4.  **Instale as dependências do Python**:
-    ```bash
-    pip install Django mysqlclient djangorestframework djangorestframework-simplejwt Pillow rembg pydub
-    ```
-    *Se houver erros na instalação do `mysqlclient` ou `rembg`, certifique-se de que os pacotes de desenvolvimento do MySQL, Python e `build-essential` estejam instalados:*
-    ```bash
-    sudo apt-get update
-    sudo apt-get install -y libmysqlclient-dev pkg-config build-essential python3.11-dev ffmpeg
-    pip install mysqlclient rembg
-    ```
-
-5.  **Configure o Banco de Dados MySQL**:
-    - Certifique-se de que o serviço MySQL esteja em execução.
-    - Conecte-se ao MySQL como `root` (ou um usuário com privilégios administrativos) e crie o banco de dados e o usuário:
-    ```bash
-    sudo mysql -u root -p
-    # Digite a senha do root do MySQL quando solicitado
-    CREATE DATABASE IF NOT EXISTS nucleotech_db;
-    CREATE USER 'nucleotech_user'@'localhost' IDENTIFIED BY 'password';
-    GRANT ALL PRIVILEGES ON nucleotech_db.* TO 'nucleotech_user'@'localhost';
-    FLUSH PRIVILEGES;
-    EXIT;
-    ```
-    *Nota: A senha 'password' é para fins de desenvolvimento.*
-
-6.  **Aplique as Migrações do Django**:
-    ```bash
-    python manage.py migrate
-    ```
-
-7.  **Crie um superusuário (opcional, para acessar o painel administrativo do Django)**:
-    ```bash
-    python manage.py createsuperuser
-    ```
-    *Siga as instruções para criar o superusuário.*
-
-8.  **Inicie o servidor de desenvolvimento do Django**:
-    ```bash
-    python manage.py runserver
-    ```
-
-### Acessando o Frontend
-
-Após iniciar o servidor Django, abra seu navegador e acesse `http://127.0.0.1:8000/`. Você será redirecionado para a página de login do frontend.
-
-### Testando as Funcionalidades
-
-- **Cadastro e Login**: Utilize as páginas de `register.html` e `login.html` para criar uma conta e fazer login.
-- **Processamento de Imagens e Áudio**: Na página `tools.html`, faça upload de arquivos e utilize as ferramentas de processamento. Os resultados serão exibidos e estarão disponíveis para download.
-- **Histórico**: A página `history.html` (atualmente com um placeholder) deverá ser implementada para exibir o histórico de processamento do usuário.
-
-## Estrutura de Pastas Final
-
+```txt
+backend/django_project/
 ```
-project/
-├── backend/
-│   ├── nucleotech_project/
-│   │   ├── __init__.py
-│   │   ├── asgi.py
-│   │   ├── settings.py
-│   │   ├── urls.py
-│   │   └── wsgi.py
-│   ├── users/
-│   │   ├── migrations/
-│   │   ├── __init__.py
-│   │   ├── admin.py
-│   │   ├── apps.py
-│   │   ├── models.py
-│   │   ├── serializers.py
-│   │   ├── tests.py
-│   │   ├── urls.py
-│   │   └── views.py
-│   ├── services/
-│   │   ├── migrations/
-│   │   ├── __init__.py
-│   │   ├── admin.py
-│   │   ├── apps.py
-│   │   ├── models.py
-│   │   ├── tests.py
-│   │   └── views.py
-│   ├── processing/
-│   │   ├── migrations/
-│   │   ├── __init__.py
-│   │   ├── admin.py
-│   │   ├── apps.py
-│   │   ├── models.py
-│   │   ├── tests.py
-│   │   ├── urls.py
-│   │   └── views.py
-│   └── subscriptions/
-│       ├── migrations/
-│       ├── __init__.py
-│       ├── admin.py
-│       ├── apps.py
-│       ├── models.py
-│       ├── tests.py
-│       └── views.py
-├── frontend/
-│   ├── css/
-│   │   └── style.css
-│   ├── js/
-│   │   ├── auth.js
-│   │   └── processing.js
-│   ├── pages/
-│   │   ├── dashboard.html
-│   │   ├── history.html
-│   │   ├── login.html
-│   │   ├── register.html
-│   │   └── tools.html
-│   └── index.html
+
+A aplicação funciona como uma API REST para autenticação, gerenciamento de usuários, assinaturas e processamento de arquivos locais.
+
+---
+
+# Estrutura do Projeto
+
+```txt
+backend/
+├── django_project/
+│   ├── api/                     # Rotas principais da API
+│   ├── apps/
+│   │   ├── users/              # Usuários e autenticação
+│   │   ├── subscriptions/      # Sistema de assinaturas
+│   │   ├── processing/         # Processamento de arquivos
+│   │   └── services/           # Serviços/ferramentas disponíveis
+│   ├── core/                   # Configurações centrais do Django
+│   ├── media/                  # Uploads e resultados processados
+│   ├── manage.py
+│   └── db.sqlite3
+│
 ├── tools/
-│   ├── audio_tools.py
-│   └── image_tools.py
-├── manage.py
-├── README.md
-└── venv/
+│   ├── image_tools/            # Ferramentas de imagem
+│   └── audio_tools/            # Ferramentas de áudio
+│
+└── scripts/
+    └── database_seed.py
 ```
+
+---
+
+# Tecnologias Utilizadas
+
+## Backend
+
+- Python
+- Django
+- Django REST Framework
+- SimpleJWT
+- SQLite
+- Threading para tarefas assíncronas locais
+
+## Processamento
+
+### Ferramentas de Imagem
+
+- Remoção de fundo
+- Upscale
+- Conversão de imagens
+- Geração de thumbnails
+
+### Ferramentas de Áudio
+
+- Conversão de áudio
+
+---
+
+# Arquitetura Geral
+
+O backend foi dividido em apps independentes para facilitar manutenção e escalabilidade.
+
+## Apps Principais
+
+| App | Responsabilidade |
+|---|---|
+| `users` | Cadastro, login e perfil |
+| `subscriptions` | Controle de planos e limites |
+| `processing` | Execução e histórico de tarefas |
+| `services` | Cadastro de ferramentas disponíveis |
+
+---
+
+# Sistema de Autenticação
+
+A autenticação utiliza JWT através do pacote:
+
+```txt
+rest_framework_simplejwt
+```
+
+O login retorna:
+
+- Access Token
+- Refresh Token
+
+As rotas protegidas utilizam:
+
+```txt
+Authorization: Bearer TOKEN
+```
+
+---
+
+# Rotas da API
+
+Arquivo principal:
+
+```txt
+backend/django_project/api/urls.py
+```
+
+Sim, existe uma API completa de cadastro, login, autenticação e gerenciamento básico de usuários.
+
+---
+
+# Endpoints
+
+## Autenticação
+
+### Cadastro
+
+```http
+POST /api/auth/register/
+```
+
+### Body
+
+```json
+{
+  "username": "usuario",
+  "email": "email@email.com",
+  "password": "senha"
+}
+```
+
+### Login
+
+```http
+POST /api/auth/login/
+```
+
+### Body
+
+```json
+{
+  "username": "usuario",
+  "password": "senha"
+}
+```
+
+### Resposta
+
+```json
+{
+  "access": "jwt_access_token",
+  "refresh": "jwt_refresh_token"
+}
+```
+
+---
+
+### Refresh Token
+
+```http
+POST /api/auth/refresh/
+```
+
+---
+
+# Usuário
+
+## Perfil
+
+```http
+GET /api/user/profile/
+```
+
+Retorna:
+
+```json
+{
+  "id": 1,
+  "username": "usuario",
+  "email": "email@email.com"
+}
+```
+
+---
+
+## Dashboard
+
+```http
+GET /api/user/dashboard/
+```
+
+Retorna informações do plano:
+
+```json
+{
+  "plano": "Premium",
+  "limite": 100,
+  "uso_atual": 27
+}
+```
+
+---
+
+# Sistema de Assinaturas
+
+## Endpoint
+
+```http
+GET /api/subscription/
+```
+
+O backend possui:
+
+- Controle de planos
+- Limites mensais
+- Controle de uso
+- Relação usuário ↔ assinatura
+
+A lógica de bloqueio já está implementada:
+
+```python
+if ua.plano and ua.uso_atual >= ua.plano.limite_mensal:
+```
+
+Ou seja: quando o usuário bate o limite do plano, o processamento é bloqueado automaticamente.
+
+Simples e eficiente. Sem aquelas arquiteturas “enterprise” absurdas que precisam de 19 microsserviços para converter uma imagem. Milagre moderno.
+
+---
+
+# Sistema de Processamento
+
+O app mais importante do backend.
+
+## Endpoint Principal
+
+```http
+POST /api/process/
+```
+
+## Envio
+
+Formato:
+
+```txt
+multipart/form-data
+```
+
+Campos:
+
+| Campo | Tipo |
+|---|---|
+| `file` | Arquivo |
+| `tool` | String |
+
+---
+
+# Ferramentas Disponíveis
+
+| Tool Slug | Função |
+|---|---|
+| `remove-bg` | Remove fundo de imagens |
+| `upscale` | Aumenta resolução |
+| `convert-image` | Conversão de imagens |
+| `thumbnail` | Cria thumbnails |
+| `convert-audio` | Conversão de áudio |
+
+---
+
+# Execução Assíncrona
+
+O processamento roda em threads:
+
+```python
+threading.Thread(...)
+```
+
+Isso evita bloquear a API principal.
+
+Atualmente o projeto usa uma abordagem local simples ao invés de:
+
+- Celery
+- Redis
+- RabbitMQ
+
+O que é perfeitamente aceitável para MVP, testes e desenvolvimento local.
+
+Inclusive, muita gente coloca fila distribuída logo no primeiro commit e transforma um CRUD em engenharia aeroespacial.
+
+---
+
+# Consulta de Status
+
+## Endpoint
+
+```http
+GET /api/process/status/<task_id>/
+```
+
+## Resposta
+
+```json
+{
+  "status": "completed",
+  "progress": 100,
+  "download_url": "http://localhost/media/results/..."
+}
+```
+
+Status possíveis:
+
+| Status | Significado |
+|---|---|
+| `pending` | Na fila |
+| `processing` | Em execução |
+| `completed` | Finalizado |
+| `failed` | Erro |
+
+---
+
+# Histórico
+
+## Endpoint
+
+```http
+GET /api/history/
+```
+
+Lista todas as execuções do usuário autenticado.
+
+---
+
+# Banco de Dados
+
+Atualmente:
+
+```txt
+SQLite
+```
+
+Configuração localizada em:
+
+```txt
+core/settings.py
+```
+
+Pode ser facilmente migrado para:
+
+- PostgreSQL
+- MariaDB
+- MySQL
+
+---
+
+# Modelos Principais
+
+## ExecucaoLocal
+
+Representa uma tarefa de processamento.
+
+Campos importantes:
+
+- task_id
+- status
+- progresso
+- data_inicio
+- data_fim
+
+---
+
+## ArquivoProcessado
+
+Armazena:
+
+- Arquivo original
+- Nome do arquivo
+- Tamanho
+
+---
+
+## ResultadoProcessamento
+
+Relaciona:
+
+- Arquivo original
+- Arquivo final processado
+
+---
+
+## UsoServico
+
+Registra:
+
+- Usuário
+- Serviço utilizado
+- Data
+- Sucesso/Falha
+
+---
+
+# Armazenamento de Arquivos
+
+Arquivos enviados:
+
+```txt
+media/uploads/
+```
+
+Resultados:
+
+```txt
+media/results/
+```
+
+---
+
+# Configurações Importantes
+
+## CORS
+
+```python
+CORS_ALLOW_ALL_ORIGINS = True
+```
+
+Bom para desenvolvimento.
+
+Péssima ideia em produção sem controle adequado.
+
+---
+
+## JWT
+
+```python
+ACCESS_TOKEN_LIFETIME = 60 minutos
+REFRESH_TOKEN_LIFETIME = 1 dia
+```
+
+---
+
+# Como Rodar o Projeto
+
+## Instalar dependências
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Rodar migrações
+
+```bash
+python manage.py migrate
+```
+
+---
+
+## Iniciar servidor
+
+```bash
+python manage.py runserver
+```
+
+---
+
+# Possíveis Melhorias
+
+## Infraestrutura
+
+- Migrar SQLite → PostgreSQL
+- Implementar Celery + Redis
+- Dockerização
+- Rate limiting
+- Logs estruturados
+- Monitoramento
+
+## Segurança
+
+- Limitar uploads
+- Validar MIME types
+- Melhorar CORS
+- Rate limit por IP
+- Antivírus para uploads
+
+## Performance
+
+- Processamento distribuído
+- Cache
+- Compressão de arquivos
+- Workers dedicados
+
+---
+
+# Pontos Fortes do Projeto
+
+- Estrutura modular
+- API limpa
+- JWT funcionando
+- Processamento desacoplado
+- Organização boa para expansão
+- Fácil manutenção
+- Separação correta entre apps
+
+O backend está surpreendentemente bem organizado para um projeto acadêmico/pessoal.
+
+A divisão entre:
+
+- autenticação
+- assinatura
+- serviços
+- processamento
+
+foi feita do jeito certo.
+
+Tem vários projetos por aí que viram um monolito caótico com tudo dentro de `views.py` em duas semanas.
+
+---
+
+# Considerações Finais
+
+O projeto já possui:
+
+- API REST funcional
+- Cadastro/login JWT
+- Controle de usuários
+- Controle de assinaturas
+- Processamento assíncrono
+- Histórico de execuções
+- Upload e geração de arquivos
+
+Ou seja:
+
+O “suco” do backend realmente está dentro de:
+
+```txt
+backend/django_project/
+```
+
+principalmente em:
+
+```txt
+apps/processing/
+```
+
+que é onde toda a lógica pesada acontece.
+
