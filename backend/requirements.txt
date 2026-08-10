@@ -1,0 +1,22 @@
+# Core Django & API
+django>=4.2,<6.0
+djangorestframework
+djangorestframework-simplejwt
+django-cors-headers
+
+# Queue & Cache (Redis)
+celery
+redis
+django-redis
+
+# File Processing Tools
+rembg[cpu]
+opencv-python-headless
+pillow
+wand
+stripe
+
+# Utilities
+requests
+python-dotenv
+sqlparse

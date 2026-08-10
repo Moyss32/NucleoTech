@@ -1,11 +1,10 @@
 @echo off
 
-echo Criando ambiente virtual...
-python -m venv venv
+echo entrando no espaço virtual
 call venv\Scripts\activate
 
 echo Instalando dependencias...
-pip install django djangorestframework djangorestframework-simplejwt pillow rembg mysqlclient django-cors-headers
+pip install -r requirements.txt
 
 echo Rodando migrations...
 cd django_project

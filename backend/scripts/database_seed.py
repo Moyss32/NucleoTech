@@ -2,61 +2,87 @@ import os
 import sys
 import django
 
-# Setup Django environment
-sys.path.append(os.path.join(os.path.dirname(__file__), '../django_project'))
+# Add the project directory to sys.path
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'django_project'))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
 django.setup()
 
+from django.contrib.auth.models import User
 from apps.services.models import Servico, Aplicativo, ServicoApp
 from apps.subscriptions.models import Assinatura
 
 def seed():
     print("Iniciando seed do banco de dados...")
     
-    # Criar Aplicativo
+    # 1. Aplicativo
     app, _ = Aplicativo.objects.get_or_create(
-        nome="NucleoTech Web",
-        descricao="Plataforma principal NucleoTech"
+        nome="FileProcessor Pro",
+        defaults={'descricao': "Plataforma completa de processamento de arquivos."}
     )
     
-    # Criar Serviços
-    servicos_data = [
+    # 2. Serviços
+    servicos = [
         {'nome': 'Remover Fundo', 'slug': 'remove-bg', 'descricao': 'Remove o fundo de imagens usando IA.'},
-        {'nome': 'Upscale', 'slug': 'upscale', 'descricao': 'Aumenta a resolução da imagem.'},
-        {'nome': 'Converter Imagem', 'slug': 'convert-image', 'descricao': 'Converte imagens entre formatos.'},
+        {'nome': 'Upscale IA', 'slug': 'upscale', 'descricao': 'Aumenta a resolução de imagens usando IA.'},
+        {'nome': 'Converter Imagem', 'slug': 'convert-image', 'descricao': 'Converte imagens entre diferentes formatos.'},
         {'nome': 'Gerar Thumbnail', 'slug': 'thumbnail', 'descricao': 'Gera miniaturas de imagens.'},
-        {'nome': 'Converter Áudio', 'slug': 'convert-audio', 'descricao': 'Converte arquivos de áudio.'},
+        {'nome': 'Converter Áudio', 'slug': 'convert-audio', 'descricao': 'Converte arquivos de áudio entre diferentes formatos.'},
     ]
     
-    for s_data in servicos_data:
+    for s in servicos:
         servico, created = Servico.objects.get_or_create(
-            slug=s_data['slug'],
-            defaults={'nome': s_data['nome'], 'descricao': s_data['descricao']}
+            slug=s['slug'],
+            defaults={'nome': s['nome'], 'descricao': s['descricao']}
         )
         ServicoApp.objects.get_or_create(servico=servico, app=app)
         if created:
-            print(f"Serviço criado: {servico.nome}")
+            print(f"Serviço criado: {s['nome']}")
 
-    # Criar Planos
-    planos_data = [
-        {'nome': 'Gratuito', 'limite_mensal': 10, 'preco': 0.00, 'descricao': 'Plano básico para testes.'},
-        {'nome': 'Pro', 'limite_mensal': 100, 'preco': 49.90, 'descricao': 'Plano para profissionais.'},
-        {'nome': 'Enterprise', 'limite_mensal': 1000, 'preco': 199.90, 'descricao': 'Plano para empresas.'},
+    # 3. Planos (Assinaturas)
+    planos = [
+        {
+            'nome': 'Gratuito', 
+            'limite_mensal': 10, 
+            'limite_diario': 2, 
+            'limite_tamanho_arquivo_mb': 5, 
+            'preco': 0.00, 
+            'descricao': 'Plano básico para testes.',
+            'acesso_upscale': False
+        },
+        {
+            'nome': 'Pro', 
+            'limite_mensal': 100, 
+            'limite_diario': 10, 
+            'limite_tamanho_arquivo_mb': 50, 
+            'preco': 29.90, 
+            'descricao': 'Plano ideal para profissionais.',
+            'acesso_upscale': True,
+            'stripe_price_id': 'price_pro_placeholder'
+        },
+        {
+            'nome': 'Enterprise', 
+            'limite_mensal': 1000, 
+            'limite_diario': 50, 
+            'limite_tamanho_arquivo_mb': 500, 
+            'preco': 99.90, 
+            'descricao': 'Para grandes volumes de processamento.',
+            'acesso_upscale': True,
+            'prioridade_fila': 1,
+            'stripe_price_id': 'price_enterprise_placeholder'
+        },
     ]
     
-    for p_data in planos_data:
-        plano, created = Assinatura.objects.get_or_create(
-            nome=p_data['nome'],
-            defaults={
-                'limite_mensal': p_data['limite_mensal'],
-                'preco': p_data['preco'],
-                'descricao': p_data['descricao']
-            }
+    for p in planos:
+        assinatura, created = Assinatura.objects.update_or_create(
+            nome=p['nome'],
+            defaults=p
         )
         if created:
-            print(f"Plano criado: {plano.nome}")
+            print(f"Plano criado: {p['nome']}")
+        else:
+            print(f"Plano atualizado: {p['nome']}")
 
-    print("Seed finalizado com sucesso!")
+    print("Seed concluído com sucesso!")
 
 if __name__ == '__main__':
     seed()

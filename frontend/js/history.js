@@ -8,8 +8,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (history && history.length > 0) {
                 historyTable.innerHTML = history.map(item => `
                     <tr>
-                        <td>${item.tool_name}</td>
-                        <td>${new Date(item.created_at).toLocaleDateString()}</td>
+                        <td>${item.servico_nome}</td>
+                        <td>${new Date(item.data_inicio).toLocaleDateString()}</td>
                         <td><span class="status-badge status-${item.status}">${item.status}</span></td>
                         <td>
                             ${item.status === 'completed' ? 

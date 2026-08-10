@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://127.0.0.1:8000'; // URL fictícia da API
+const API_BASE_URL = 'http://127.0.0.1:8000/api'; // Base URL com prefixo /api
 
 const api = {
     async fetchAPI(endpoint, method = 'GET', data = null) {
@@ -17,8 +17,8 @@ const api = {
             headers,
         };
 
-       if (method !== 'GET') {
-        config.body = JSON.stringify(data || {});
+       if (data && method !== 'GET') {
+        config.body = JSON.stringify(data);
         }
 
         try {

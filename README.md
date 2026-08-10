@@ -442,28 +442,7 @@ REFRESH_TOKEN_LIFETIME = 1 dia
 
 # Como Rodar o Projeto
 
-## Instalar dependências
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-## Rodar migrações
-
-```bash
-python manage.py migrate
-```
-
----
-
-## Iniciar servidor
-
-```bash
-python manage.py runserver
-```
-
+*É nessessario apenas rodar o arquivo .bat*
 ---
 
 # Possíveis Melhorias
